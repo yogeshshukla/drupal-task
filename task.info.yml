@@ -1,0 +1,5 @@
+name: task module
+description: this is task module
+type: module
+core: 8.x
+package: Custom

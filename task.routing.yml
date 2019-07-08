@@ -1,0 +1,7 @@
+task.validate_request:
+  path: '/page_json/{sitekey}/{node}'
+  defaults:
+    _controller: '\Drupal\task\Controller\ResponsePageController::showJsonData'
+    _title: 'JSON data'
+  requirements:
+    _custom_access: '\Drupal\task\Controller\ResponsePageController::access'

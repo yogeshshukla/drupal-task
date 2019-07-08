@@ -1,0 +1,29 @@
+<?php
+
+/**
+ * Implements hook_form_alter().
+ */
+function task_form_alter( &$form, &$form_state, $form_id ) {
+	if ( $form_id == 'system_site_information_settings' ) {
+		$siteapikey                             = \Drupal::config( 'system.site' )->get( 'siteapikey' );
+		$form['site_information']['siteapikey'] = array(
+			'#title'         => t( 'Site Api Key' ),
+			'#description'   => t( 'This is Site Api Key field' ),
+			'#type'          => 'textfield',
+			'#default_value' => ! empty( $siteapikey ) ? $siteapikey : t( 'No API Key yet' ),
+		);
+		$form['#submit'][]                      = 'task_handler';
+		$form['actions']['submit']['#value']    = 'Updated Configuration';
+	}
+
+}
+
+/**
+ * Implements callback handler task_handler().
+ */
+function task_handler( $form, &$form_state ) {
+	$sys_vars = \Drupal::configFactory()->getEditable( 'system.site' );
+	$sys_vars->set( 'siteapikey', $form_state->getValue( 'siteapikey' ) );
+	$sys_vars->save();
+	drupal_set_message( t( 'Site API key has been saved with value %apivalue%', array( '%apivalue%' => $form_state->getValue( 'siteapikey' ) ) ), 'status', true );
+}
